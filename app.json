@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "SwipeClean",
+    "slug": "swipe-clean",
+    "version": "1.4.0",
+    "description": "Swipe through your photos to keep or trash them — fast, fun gallery cleanup.",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "swipeclean",
+    "userInterfaceStyle": "automatic",
+    "primaryColor": "#bdf14d",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#edf2f5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.swipeclean.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "SwipeClean needs access to your photos so you can review and clean your gallery.",
+        "NSPhotoLibraryAddUsageDescription": "SwipeClean may need access to save changes when you delete photos from your gallery."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#edf2f5"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.swipeclean.app",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow SwipeClean to access your photos to help you clean your gallery.",
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": [
+            "photo"
+          ]
+        }
+      ],
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9a36ee10-c0ec-4504-8c06-ae8c3d44a860"
+      }
+    }
+  }
+}
