@@ -1,14 +1,15 @@
 import EmptyState from "@/components/EmptyState";
 import {
   BG_COLOR,
-  GREEN,
   SPACING,
   TEXT_COLOR,
 } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { useAppState } from "@/context/AppStateContext";
 import { GalleryPhoto } from "@/types/media";
 import { Image } from "expo-image";
-import { Trash2, Undo2 } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { ArrowRight, Trash2, Undo2 } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -29,17 +30,18 @@ const TILE_SIZE =
   (width - SPACING * 2 - GRID_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
 
 export default function TrashScreen() {
+  const router = useRouter();
   const { trashQueue, trashCount, undoTrash, deleteAllTrash } = useAppState();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteAll = () => {
     Alert.alert(
-      "Delete all photos?",
-      `${trashCount} photo${trashCount === 1 ? "" : "s"} will be permanently removed from your device.`,
+      translations.deleteAllPhotos,
+      `${trashCount} ${translations.photosWillBeRemoved}`,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: translations.cancel, style: "cancel" },
         {
-          text: "Delete all",
+          text: translations.deleteAll,
           style: "destructive",
           onPress: async () => {
             setIsDeleting(true);
@@ -48,8 +50,8 @@ export default function TrashScreen() {
 
             if (!result.success) {
               Alert.alert(
-                "Delete failed",
-                result.message ?? "Something went wrong."
+                translations.deleteFailed,
+                result.message ?? translations.somethingWentWrong
               );
             }
           },
@@ -80,18 +82,23 @@ export default function TrashScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View style={styles.header}>
-        <Text style={styles.title}>Trash</Text>
-        <Text style={styles.subtitle}>
-          {trashCount} item{trashCount === 1 ? "" : "s"} waiting to delete
-        </Text>
+        <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <ArrowRight color={TEXT_COLOR} size={24} />
+        </Pressable>
+        <View style={styles.headerText}>
+          <Text style={styles.title}>{translations.trashTitle}</Text>
+          <Text style={styles.subtitle}>
+            {trashCount} {translations.pendingInTrash}
+          </Text>
+        </View>
       </View>
 
       {trashCount === 0 ? (
         <View style={styles.emptyWrap}>
           <EmptyState
             icon={Trash2}
-            title="Trash is empty"
-            message="Swipe photos left on the home screen to add them here before deleting."
+            title={translations.trashEmpty}
+            message={translations.trashEmptyMessage}
           />
         </View>
       ) : (
@@ -117,7 +124,7 @@ export default function TrashScreen() {
                 <ActivityIndicator color={TEXT_COLOR} />
               ) : (
                 <Text style={styles.deleteButtonText}>
-                  Delete all ({trashCount})
+                  {translations.deleteAll} ({trashCount})
                 </Text>
               )}
             </Pressable>
@@ -138,16 +145,27 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 16,
     gap: 6,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  headerText: {
+    flex: 1,
   },
   title: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 28,
     color: TEXT_COLOR,
+    textAlign: "right",
   },
   subtitle: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 15,
     color: "gray",
+    textAlign: "right",
   },
   grid: {
     paddingHorizontal: SPACING,
@@ -196,7 +214,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   deleteButtonText: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 18,
     color: "white",
   },

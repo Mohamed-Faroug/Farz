@@ -1,8 +1,10 @@
 import SessionProgress from "@/components/SessionProgress";
 import { BG_COLOR, GREEN, TEXT_COLOR } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { useAppState } from "@/context/AppStateContext";
 import { useGalleryPhotos } from "@/hooks/useGalleryPhotos";
 import { formatBytes } from "@/utils/formatBytes";
+import { Check, Images, Trash2 } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -12,6 +14,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Animated, { FadeInLeft, FadeInRight, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type StatRowProps = {
@@ -46,12 +49,12 @@ export default function StatsScreen() {
 
   const handleReset = () => {
     Alert.alert(
-      "Reset session?",
-      "This clears kept, trash, and stats. Your gallery photos will not be deleted.",
+      translations.resetSessionAlert,
+      translations.resetAlertMessage,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: translations.cancel, style: "cancel" },
         {
-          text: "Reset",
+          text: translations.reset,
           style: "destructive",
           onPress: async () => {
             setIsResetting(true);
@@ -63,30 +66,94 @@ export default function StatsScreen() {
     );
   };
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const stats = [
+    {
+      label: translations.reviewed,
+      value: String(reviewedCount),
+      icon: <Images color="#000000" size={20} />,
+      color: "#bdf14d",
+      textColor: "black",
+    },
+    {
+      label: translations.kept,
+      value: String(keptCount),
+      icon: <Check color="#000000" size={20} />,
+      color: "black",
+      textColor: "white",
+    },
+    {
+      label: translations.trash,
+      value: String(trashCount),
+      icon: <Trash2 color="#000000" size={20} />,
+      color: "#f14de1ff",
+      textColor: "white",
+    },
+  ];
+
+  const handlePress = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % stats.length);
+  };
+
+  const stylesReanimated = useAnimatedStyle(() => {
+    return {
+      backgroundColor: withTiming(
+        stats[activeIndex === 2 ? 0 : activeIndex + 1].color,
+        { duration: 250 }
+      ),
+    };
+  });
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-      <Text style={styles.title}>Session Stats</Text>
-
-      <SessionProgress reviewedCount={reviewedCount} totalCount={totalCount} />
+      <Animated.View
+        entering={FadeInRight.springify()}
+        exiting={FadeInLeft.springify()}
+        style={styles.header}
+      >
+        <Text style={styles.title}>{translations.sessionStats}</Text>
+        <View style={styles.rightHeader}>
+          <SessionProgress reviewedCount={reviewedCount} totalCount={totalCount} />
+          <Pressable onPress={handlePress} style={styles.badgeContainer}>
+            <Animated.View style={[styles.placeholderBg, stylesReanimated]} />
+            {stats.map((stat, index) => (
+              <View
+                key={stat.label}
+                style={[
+                  styles.badgeItem,
+                  { backgroundColor: stat.color },
+                  activeIndex === index && styles.activeBadge,
+                ]}
+              >
+                <View style={styles.iconContainer}>{stat.icon}</View>
+                <Text style={[styles.valueText, { color: stat.textColor }]}>
+                  {stat.value}
+                </Text>
+              </View>
+            ))}
+          </Pressable>
+        </View>
+      </Animated.View>
 
       <View style={styles.card}>
-        <StatRow label="Reviewed" value={String(reviewedCount)} />
-        <StatRow label="Kept" value={String(keptCount)} />
-        <StatRow label="In trash" value={String(trashCount)} />
-        <StatRow label="Deleted from device" value={String(deletedCount)} />
+        <StatRow label={translations.reviewed} value={String(reviewedCount)} />
+        <StatRow label={translations.kept} value={String(keptCount)} />
+        <StatRow label={translations.trash} value={String(trashCount)} />
+        <StatRow label={translations.deletedFromDevice} value={String(deletedCount)} />
         <StatRow
-          label="Space freed"
+          label={translations.spaceFreed}
           value={formatBytes(freedBytesTotal)}
           highlight
         />
         <StatRow
-          label="Pending in trash"
+          label={translations.pendingInTrash}
           value={formatBytes(pendingTrashBytes)}
         />
       </View>
 
       <Text style={styles.note}>
-        Stats are saved automatically and persist when you reopen the app.
+        {translations.statsNote}
       </Text>
 
       <Pressable
@@ -97,7 +164,7 @@ export default function StatsScreen() {
         {isResetting ? (
           <ActivityIndicator color={TEXT_COLOR} />
         ) : (
-          <Text style={styles.resetButtonText}>Reset session</Text>
+          <Text style={styles.resetButtonText}>{translations.resetSession}</Text>
         )}
       </Pressable>
     </SafeAreaView>
@@ -112,10 +179,69 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     gap: 20,
   },
+  header: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    marginTop: 10,
+    direction: "rtl",
+  },
   title: {
-    fontFamily: "Goldman-Bold",
-    fontSize: 28,
+    fontFamily: "Thmanyah-Bold",
+    fontSize: 24,
     color: TEXT_COLOR,
+    textAlign: "right",
+  },
+  rightHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  badgeContainer: {
+    height: 44,
+    width: 120,
+    position: "relative",
+  },
+  placeholderBg: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "red",
+    borderRadius: 22,
+    position: "absolute",
+    transformOrigin: "left",
+    transform: [
+      { rotateZ: "8deg" },
+      { translateY: -2 },
+    ],
+  },
+  badgeItem: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: 7,
+    flexDirection: "row",
+    gap: 10,
+    borderRadius: 22,
+    opacity: 0,
+  },
+  activeBadge: {
+    opacity: 1,
+  },
+  iconContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+  },
+  valueText: {
+    fontFamily: "Goldman-Bold",
+    fontSize: 18,
   },
   card: {
     backgroundColor: "white",
@@ -129,12 +255,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   statLabel: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 16,
     color: "gray",
   },
   statValue: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 22,
     color: TEXT_COLOR,
   },
@@ -142,7 +268,7 @@ const styles = StyleSheet.create({
     color: GREEN,
   },
   note: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 14,
     color: "gray",
     lineHeight: 20,
@@ -159,7 +285,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   resetButtonText: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 16,
     color: "#f14de1",
   },

@@ -4,6 +4,7 @@ import {
   SWIPE_THRESHOLD,
   SWIPE_VELOCITY_THRESHOLD,
 } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { SwipeAction } from "@/types/media";
 import { triggerKeepHaptic, triggerTrashHaptic } from "@/utils/haptics";
 import { BlurView } from "expo-blur";
@@ -157,20 +158,20 @@ const CardItem = ({ index, uri, topCardDragX, onSwipe }: Props) => {
           style={[styles.overlay, styles.keepOverlay, keepOverlayStyle]}
           pointerEvents="none"
         >
-          <Text style={styles.overlayLabel}>KEEP</Text>
+          <Text style={styles.overlayLabel}>{translations.keep}</Text>
         </Animated.View>
 
         <Animated.View
           style={[styles.overlay, styles.deleteOverlay, deleteOverlayStyle]}
           pointerEvents="none"
         >
-          <Text style={styles.deleteOverlayLabel}>DELETE</Text>
+          <Text style={styles.deleteOverlayLabel}>{translations.delete}</Text>
         </Animated.View>
 
         <BlurView style={styles.blurViewContainer} intensity={50}>
           <View style={styles.contentContainer}>
-            <Text style={styles.hintText}>DELETE</Text>
-            <Text style={styles.keepText}>KEEP</Text>
+            <Text style={styles.hintText}>{translations.delete}</Text>
+            <Text style={styles.keepText}>{translations.keep}</Text>
           </View>
         </BlurView>
       </Animated.View>
@@ -205,13 +206,13 @@ const styles = StyleSheet.create({
     backgroundColor: DELETE_COLOR,
   },
   overlayLabel: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 32,
     color: "black",
     letterSpacing: 2,
   },
   deleteOverlayLabel: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 32,
     color: "white",
     letterSpacing: 2,
@@ -235,12 +236,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   hintText: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 14,
     color: "white",
   },
   keepText: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 18,
     color: "white",
   },

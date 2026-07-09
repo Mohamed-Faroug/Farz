@@ -1,11 +1,11 @@
 import { GREEN, TEXT_COLOR } from "@/constants/constants";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
+import {
   useSharedValue,
-  withTiming,
+  withTiming
 } from "react-native-reanimated";
+
 
 type Props = {
   reviewedCount: number;
@@ -20,18 +20,14 @@ const SessionProgress = ({ reviewedCount, totalCount }: Props) => {
     progress.value = withTiming(target, { duration: 350 });
   }, [reviewedCount, totalCount, progress]);
 
-  const fillStyle = useAnimatedStyle(() => ({
-    width: `${progress.value * 100}%`,
-  }));
+  const percentage = Math.round((reviewedCount / Math.max(totalCount, 1)) * 100);
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        {reviewedCount} of {Math.max(totalCount, 0)} reviewed
+        {reviewedCount}/{Math.max(totalCount, 0)}
       </Text>
-      <View style={styles.track}>
-        <Animated.View style={[styles.fill, fillStyle]} />
-      </View>
+      <Text style={styles.percentage}>{percentage}%</Text>
     </View>
   );
 };
@@ -40,25 +36,23 @@ export default SessionProgress;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    paddingHorizontal: 20,
+    backgroundColor: GREEN,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 22,
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   label: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 14,
     color: TEXT_COLOR,
   },
-  track: {
-    width: "100%",
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "white",
-    overflow: "hidden",
-  },
-  fill: {
-    height: "100%",
-    borderRadius: 4,
-    backgroundColor: GREEN,
+  percentage: {
+    fontFamily: "Thmanyah-Bold",
+    fontSize: 14,
+    color: TEXT_COLOR,
+    opacity: 0.8,
   },
 });

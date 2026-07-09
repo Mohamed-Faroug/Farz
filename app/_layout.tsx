@@ -1,6 +1,6 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { AppStateProvider } from "@/context/AppStateContext";
 import { BG_COLOR } from "@/constants/constants";
+import { AppStateProvider } from "@/context/AppStateContext";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -28,6 +28,9 @@ export default function RootLayout() {
     "SF-Pro-Rounded-Bold": require("../assets/fonts/SF-Pro-Rounded-Bold.otf"),
     "Goldman-Bold": require("../assets/fonts/Goldman-Bold.ttf"),
     "Goldman-Regular": require("../assets/fonts/Goldman-Regular.ttf"),
+    "Thmanyah-Regular": require("../assets/fonts/thmanyahserifdisplay-Regular.otf"),
+    "Thmanyah-Bold": require("../assets/fonts/thmanyahserifdisplay-Bold.otf"),
+    "Thmanyah-Black": require("../assets/fonts/thmanyahserifdisplay-Black.otf"),
     ...FontAwesome.font,
   });
 

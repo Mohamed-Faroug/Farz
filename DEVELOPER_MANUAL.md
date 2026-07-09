@@ -1,8 +1,8 @@
-# SwipeClean - Developer Manual
+# Farz - Developer Manual
 
 **Version:** 1.4.0  
 **Last Updated:** 2026  
-**Purpose:** Complete guide for developing, maintaining, and extending the SwipeClean app
+**Purpose:** Complete guide for developing, maintaining, and extending the Farz app
 
 ---
 
@@ -22,11 +22,11 @@
 
 ### App Name and Purpose
 
-**SwipeClean** is a mobile application designed to help users quickly clean up their photo galleries through an intuitive swipe-based interface. Users can review photos one by one and swipe left to trash or swipe right to keep them.
+**Farz** is a mobile application designed to help users quickly clean up their photo galleries through an intuitive swipe-based interface. Users can review photos one by one and swipe left to trash or swipe right to keep them.
 
 ### Main Problem Solved
 
-Managing large photo galleries can be overwhelming. SwipeClean solves this by:
+Managing large photo galleries can be overwhelming. Farz solves this by:
 - Providing a Tinder-like card swiping experience for photo review
 - Batch deleting unwanted photos to free up storage space
 - Tracking cleanup progress with session statistics
@@ -528,7 +528,7 @@ Handles photo library permissions, requests access when needed, and gracefully h
 **App Title:**
 ```typescript
 // Line 136
-<Text style={styles.appTitle}>SwipeClean</Text>
+<Text style={styles.appTitle}>Farz</Text>
 // Change to your app name
 ```
 
@@ -875,7 +875,7 @@ npm install i18n-js
 ```typescript
 // locales/en.json
 {
-  "app.title": "SwipeClean",
+  "app.title": "Farz",
   "trash.title": "Trash",
   "stats.title": "Session Stats",
   "delete.confirm": "Delete all photos?"
@@ -883,7 +883,7 @@ npm install i18n-js
 
 // locales/es.json
 {
-  "app.title": "SwipeClean",
+  "app.title": "Farz",
   "trash.title": "Papelera",
   "stats.title": "Estadísticas"
 }
@@ -1735,7 +1735,7 @@ cardsSwiping - Copy/
 ```json
 {
   "expo": {
-    "name": "SwipeClean",              // App name
+    "name": "Farz",              // App name
     "version": "1.4.0",                // App version
     "slug": "swipe-clean",             // URL slug
     "ios": {

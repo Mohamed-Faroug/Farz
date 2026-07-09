@@ -10,6 +10,7 @@ export type PersistedAppState = {
   trashQueue: GalleryPhoto[];
   deletedCount: number;
   freedBytesTotal: number;
+  lastAction: { photo: GalleryPhoto; action: "keep" | "trash" } | null;
 };
 
 export const DEFAULT_APP_STATE: PersistedAppState = {
@@ -18,4 +19,5 @@ export const DEFAULT_APP_STATE: PersistedAppState = {
   trashQueue: [],
   deletedCount: 0,
   freedBytesTotal: 0,
+  lastAction: null,
 };

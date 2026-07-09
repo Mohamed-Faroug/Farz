@@ -25,9 +25,11 @@ type AppStateContextValue = {
   reviewedCount: number;
   pendingTrashBytes: number;
   excludedPhotoIds: Set<string>;
+  lastAction: { photo: GalleryPhoto; action: "keep" | "trash" } | null;
   keepPhoto: (photo: GalleryPhoto) => void;
   trashPhoto: (photo: GalleryPhoto) => void;
   undoTrash: (photoId: string) => void;
+  undoLastAction: () => void;
   deleteAllTrash: () => Promise<{ success: boolean; message?: string }>;
   resetSession: () => Promise<void>;
 };
@@ -68,6 +70,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           keptPhotoIds: [...prev.keptPhotoIds, photo.id],
+          lastAction: { photo, action: "keep" },
         };
       });
     },
@@ -81,6 +84,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           trashQueue: [...prev.trashQueue, photo],
+          lastAction: { photo, action: "trash" },
         };
       });
     },
@@ -96,6 +100,32 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     },
     [updateState]
   );
+
+  const undoLastAction = useCallback(() => {
+    updateState((prev) => {
+      if (!prev.lastAction) return prev;
+
+      const { photo, action } = prev.lastAction;
+
+      if (action === "keep") {
+        // Undo keep: remove from keptPhotoIds
+        return {
+          ...prev,
+          keptPhotoIds: prev.keptPhotoIds.filter((id) => id !== photo.id),
+          lastAction: null,
+        };
+      } else if (action === "trash") {
+        // Undo trash: remove from trashQueue
+        return {
+          ...prev,
+          trashQueue: prev.trashQueue.filter((p) => p.id !== photo.id),
+          lastAction: null,
+        };
+      }
+
+      return prev;
+    });
+  }, [updateState]);
 
   const deleteAllTrash = useCallback(async () => {
     if (state.trashQueue.length === 0) {
@@ -174,9 +204,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       reviewedCount,
       pendingTrashBytes,
       excludedPhotoIds,
+      lastAction: state.lastAction,
       keepPhoto,
       trashPhoto,
       undoTrash,
+      undoLastAction,
       deleteAllTrash,
       resetSession,
     }),
@@ -188,9 +220,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       reviewedCount,
       pendingTrashBytes,
       excludedPhotoIds,
+      state.lastAction,
       keepPhoto,
       trashPhoto,
       undoTrash,
+      undoLastAction,
       deleteAllTrash,
       resetSession,
     ]

@@ -1,4 +1,5 @@
 import { TEXT_COLOR } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { useAppState } from "@/context/AppStateContext";
 import { formatBytes } from "@/utils/formatBytes";
 import React from "react";
@@ -9,8 +10,10 @@ const SessionSummary = () => {
 
   return (
     <Text style={styles.summary}>
-      {reviewedCount} reviewed · {deletedCount} deleted ·{" "}
-      {formatBytes(freedBytesTotal)} freed
+      {translations.sessionSummary
+        .replace("{reviewed}", String(reviewedCount))
+        .replace("{deleted}", String(deletedCount))
+        .replace("{freed}", formatBytes(freedBytesTotal))}
     </Text>
   );
 };
@@ -19,9 +22,10 @@ export default SessionSummary;
 
 const styles = StyleSheet.create({
   summary: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 15,
     color: TEXT_COLOR,
     flex: 1,
+    textAlign: "right",
   },
 });

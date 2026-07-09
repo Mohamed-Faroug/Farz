@@ -1,36 +1,38 @@
 {
   "expo": {
-    "name": "SwipeClean",
-    "slug": "swipe-clean",
+    "name": "Farz",
+    "slug": "farz",
     "version": "1.4.0",
     "description": "Swipe through your photos to keep or trash them — fast, fun gallery cleanup.",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "swipeclean",
+    "scheme": "farz",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#bdf14d",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#edf2f5"
-    },
+      "splash": {
+        "image": "./assets/images/splash-icon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#fc6f1f"  //1a1a2e
+      },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.swipeclean.app",
+      "bundleIdentifier": "com.farz.app",
+      "supportsRTL": true,
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "SwipeClean needs access to your photos so you can review and clean your gallery.",
-        "NSPhotoLibraryAddUsageDescription": "SwipeClean may need access to save changes when you delete photos from your gallery."
+        "NSPhotoLibraryUsageDescription": "Farz needs access to your photos so you can review and clean your gallery.",
+        "NSPhotoLibraryAddUsageDescription": "Farz may need access to save changes when you delete photos from your gallery."
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#edf2f5"
+        "backgroundColor": "#fc6f1f"    // 1a1a2e
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.swipeclean.app",
+      "package": "com.farz.app",
+      "supportsRTL": true,
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -47,7 +49,7 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow SwipeClean to access your photos to help you clean your gallery.",
+          "photosPermission": "Allow Farz to access your photos to help you clean your gallery.",
           "isAccessMediaLocationEnabled": false,
           "granularPermissions": [
             "photo"
@@ -62,7 +64,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "9a36ee10-c0ec-4504-8c06-ae8c3d44a860"
+        "projectId": "6d40d359-2d3b-406b-b131-ac2dcdeee5a9"
       }
     }
   }

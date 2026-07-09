@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   title: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 22,
     color: TEXT_COLOR,
     textAlign: "center",
   },
   message: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 15,
     color: "gray",
     textAlign: "center",
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   actionText: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 14,
     color: GREEN,
   },

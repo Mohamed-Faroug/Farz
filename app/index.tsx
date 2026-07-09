@@ -1,3 +1,4 @@
+import SplashScreen from "@/components/SplashScreen";
 import { isOnboardingComplete } from "@/storage/onboardingStorage";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ export default function Index() {
   }, []);
 
   if (!isReady) {
-    return null;
+    return <SplashScreen />;
   }
 
   if (!onboardingDone) {

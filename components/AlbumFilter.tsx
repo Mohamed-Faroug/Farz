@@ -1,5 +1,5 @@
-import { AlbumOption } from "@/hooks/useAlbums";
 import { GREEN, TEXT_COLOR } from "@/constants/constants";
+import { AlbumOption } from "@/hooks/useAlbums";
 import React from "react";
 import {
   Pressable,

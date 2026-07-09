@@ -1,41 +1,29 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import BadgeItem from "@/components/BadgeItem";
-import AlbumFilter from "@/components/AlbumFilter";
 import Cards from "@/components/Cards";
-import Footer from "@/components/Footer";
 import PermissionScreen from "@/components/PermissionScreen";
 import SessionProgress from "@/components/SessionProgress";
-import {
-  BACKGROUND_TRANSLATE_Y,
-  BADGE_HEIGHT,
-  BADGE_WIDTH,
-  BG_COLOR,
-  INACTIVE_ROTATION,
-  TEXT_COLOR,
-} from "@/constants/constants";
+import ActionBar from "@/components/tabbar/ActionBar";
+import { BG_COLOR, TEXT_COLOR } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { useAppState } from "@/context/AppStateContext";
 import { useAlbums } from "@/hooks/useAlbums";
 import { useGalleryPhotos } from "@/hooks/useGalleryPhotos";
-import { StatPill } from "@/types/types";
-import { Check, Images, Trash2 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, {
   FadeInLeft,
-  FadeInRight,
-  useAnimatedStyle,
-  withTiming,
+  FadeInRight
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ICON_SIZE = 20;
 
 export default function TabOneScreen() {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [photosRemaining, setPhotosRemaining] = useState(0);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const [albumId, setAlbumId] = useState<string | null>(null);
+  const [currentPhotoUri, setCurrentPhotoUri] = useState<string | null>(null);
 
   const { keptCount, trashCount, excludedPhotoIds, keepPhoto, trashPhoto, reviewedCount } =
     useAppState();
@@ -66,36 +54,12 @@ export default function TabOneScreen() {
     [photos, excludedPhotoIds]
   );
 
-  const stats: StatPill[] = useMemo(
-    () => [
-      {
-        label: "photos-left",
-        value: String(photosRemaining || reviewablePhotos.length || totalCount || 0),
-        icon: <Images color="#000000" size={ICON_SIZE} />,
-        color: "#bdf14d",
-        textColor: "black",
-      },
-      {
-        label: "kept",
-        value: String(keptCount),
-        icon: <Check color="#000000" size={ICON_SIZE} />,
-        color: "black",
-        textColor: "white",
-      },
-      {
-        label: "trash",
-        value: String(trashCount),
-        icon: <Trash2 color="#000000" size={ICON_SIZE} />,
-        color: "#f14de1ff",
-        textColor: "white",
-      },
-    ],
-    [photosRemaining, reviewablePhotos.length, totalCount, keptCount, trashCount]
-  );
-
-  const handlePress = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % stats.length);
-  };
+  // Update current photo URI when photos change
+  useEffect(() => {
+    if (reviewablePhotos.length > 0 && !currentPhotoUri) {
+      setCurrentPhotoUri(reviewablePhotos[0].uri);
+    }
+  }, [reviewablePhotos, currentPhotoUri]);
 
   const handleRequestPermission = async () => {
     setIsRequestingPermission(true);
@@ -114,15 +78,6 @@ export default function TabOneScreen() {
     loadMore();
   }, [loadMore]);
 
-  const stylesReanimated = useAnimatedStyle(() => {
-    return {
-      backgroundColor: withTiming(
-        stats[activeIndex === 2 ? 0 : activeIndex + 1].color,
-        { duration: 250 }
-      ),
-    };
-  });
-
   const showPermissionScreen = !permission?.granted;
 
   return (
@@ -133,36 +88,22 @@ export default function TabOneScreen() {
           exiting={FadeInLeft.springify()}
           style={styles.header}
         >
-          <Text style={styles.appTitle}>SwipeClean</Text>
-          <Pressable onPress={handlePress} style={styles.badgeContainer}>
-            <Animated.View style={[styles.placeholderBg, stylesReanimated]} />
-            {stats.map((stat, index) => (
-              <BadgeItem
-                index={index}
-                value={stat.value}
-                activeIndex={activeIndex}
-                key={stat.label}
-                icon={stat.icon}
-                color={stat.color}
-              />
-            ))}
-          </Pressable>
+          <Text style={styles.appTitle}>{translations.appName}</Text>
+          {!showPermissionScreen && (
+            <SessionProgress
+              reviewedCount={reviewedCount}
+              totalCount={totalCount}
+            />
+          )}
         </Animated.View>
 
-        {!showPermissionScreen && (
-          <SessionProgress
-            reviewedCount={reviewedCount}
-            totalCount={totalCount}
-          />
-        )}
-
-        {!showPermissionScreen && filterOptions.length > 1 && (
+        {/* {!showPermissionScreen && filterOptions.length > 1 && (
           <AlbumFilter
             options={filterOptions}
             selectedAlbumId={selectedAlbumId}
             onSelect={setSelectedAlbumId}
           />
-        )}
+        )} */}
 
         <View style={styles.cardsContainer}>
           {showPermissionScreen ? (
@@ -189,7 +130,14 @@ export default function TabOneScreen() {
           )}
         </View>
 
-        {!showPermissionScreen && <Footer />}
+        {/* Action Bar - always visible */}
+        {!showPermissionScreen && (
+          <ActionBar
+            onKeep={() => reviewablePhotos.length > 0 && keepPhoto(reviewablePhotos[0])}
+            onDelete={() => reviewablePhotos.length > 0 && trashPhoto(reviewablePhotos[0])}
+            currentPhotoUri={currentPhotoUri}
+          />
+        )}
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -204,9 +152,11 @@ const styles = StyleSheet.create({
     backgroundColor: BG_COLOR,
   },
   appTitle: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 24,
     color: TEXT_COLOR,
+    textAlign: "right",
+    writingDirection: "rtl",
   },
   header: {
     width: "100%",
@@ -215,23 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 20,
     marginTop: 10,
-  },
-  badgeContainer: {
-    height: BADGE_HEIGHT,
-    width: BADGE_WIDTH,
-    position: "relative",
-  },
-  placeholderBg: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "red",
-    borderRadius: BADGE_HEIGHT / 2,
-    position: "absolute",
-    transformOrigin: "left",
-    transform: [
-      { rotateZ: INACTIVE_ROTATION },
-      { translateY: BACKGROUND_TRANSLATE_Y },
-    ],
+    direction: "rtl",
   },
   cardsContainer: {
     width: "100%",

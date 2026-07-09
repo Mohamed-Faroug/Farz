@@ -1,20 +1,21 @@
 import { BG_COLOR, GREEN, TEXT_COLOR } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { Link, Stack } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: "Not Found", headerShown: false }} />
+      <Stack.Screen options={{ title: translations.pageNotFound, headerShown: false }} />
       <View style={styles.container}>
         <Text style={styles.emoji}>📷</Text>
-        <Text style={styles.title}>Page not found</Text>
+        <Text style={styles.title}>{translations.pageNotFound}</Text>
         <Text style={styles.message}>
-          This screen doesn't exist in SwipeClean.
+          {translations.screenNotFound}
         </Text>
 
         <Link href="/(tabs)" style={styles.link}>
-          <Text style={styles.linkText}>Back to Swipe</Text>
+          <Text style={styles.linkText}>{translations.backToHome}</Text>
         </Link>
       </View>
     </>
@@ -35,12 +36,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 24,
     color: TEXT_COLOR,
+    textAlign: "center",
   },
   message: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 15,
     color: "gray",
     textAlign: "center",
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   linkText: {
-    fontFamily: "Goldman-Bold",
+    fontFamily: "Thmanyah-Bold",
     fontSize: 15,
     color: GREEN,
   },

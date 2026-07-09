@@ -7,6 +7,7 @@ import {
   SPACING,
   TEXT_COLOR,
 } from "@/constants/constants";
+import { translations } from "@/constants/translations";
 import { GalleryPhoto, SwipeAction } from "@/types/media";
 import { prefetchPhotoUris } from "@/utils/imagePrefetch";
 import { ImageIcon, PartyPopper, RefreshCw } from "lucide-react-native";
@@ -105,10 +106,9 @@ const Cards = ({
   if (isLoading && cards.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Review Photos</Text>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={TEXT_COLOR} />
-          <Text style={styles.loadingText}>Loading your gallery...</Text>
+          <Text style={styles.loadingText}>{translations.loadingGallery}</Text>
         </View>
       </View>
     );
@@ -117,13 +117,12 @@ const Cards = ({
   if (error && cards.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Review Photos</Text>
         <View style={styles.emptyContainer}>
           <EmptyState
             icon={RefreshCw}
-            title="Couldn't load photos"
+            title={translations.couldNotLoadPhotos}
             message={error}
-            actionLabel="Try again"
+            actionLabel={translations.tryAgain}
             onAction={onRetry}
           />
         </View>
@@ -134,19 +133,18 @@ const Cards = ({
   if (!isLoading && cards.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Review Photos</Text>
         <View style={styles.emptyContainer}>
           {photos.length > 0 ? (
             <EmptyState
               icon={PartyPopper}
-              title="Gallery clean!"
-              message="You've reviewed every photo in your queue. Great work!"
+              title={translations.galleryClean}
+              message={translations.reviewedAllPhotos}
             />
           ) : (
             <EmptyState
               icon={ImageIcon}
-              title="No photos found"
-              message="Your gallery appears empty or photos could not be loaded."
+              title={translations.noPhotosFound}
+              message={translations.galleryEmpty}
             />
           )}
         </View>
@@ -156,7 +154,6 @@ const Cards = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Review Photos</Text>
       <View
         style={{
           width: "100%",
@@ -195,14 +192,8 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 32,
+    gap: 16,
     paddingHorizontal: SPACING,
-  },
-  title: {
-    fontFamily: "Goldman-Bold",
-    fontSize: 24,
-    color: TEXT_COLOR,
-    alignSelf: "flex-start",
   },
   loadingContainer: {
     width: CARD_WIDTH,
@@ -216,7 +207,7 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
   },
   loadingText: {
-    fontFamily: "Goldman-Regular",
+    fontFamily: "Thmanyah-Regular",
     fontSize: 15,
     color: "gray",
   },
