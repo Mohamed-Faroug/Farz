@@ -12,7 +12,7 @@ export default function OnboardingScreen() {
 
   const handleGetStarted = async () => {
     await markOnboardingComplete();
-    router.replace("/(tabs)");
+    router.push("/OfferScreen1");
   };
 
   return (

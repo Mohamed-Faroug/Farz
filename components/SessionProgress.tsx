@@ -20,14 +20,11 @@ const SessionProgress = ({ reviewedCount, totalCount }: Props) => {
     progress.value = withTiming(target, { duration: 350 });
   }, [reviewedCount, totalCount, progress]);
 
-  const percentage = Math.round((reviewedCount / Math.max(totalCount, 1)) * 100);
-
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
         {reviewedCount}/{Math.max(totalCount, 0)}
       </Text>
-      <Text style={styles.percentage}>{percentage}%</Text>
     </View>
   );
 };
@@ -40,19 +37,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 22,
-    flexDirection: "row",
     alignItems: "center",
-    gap: 8,
   },
   label: {
     fontFamily: "Thmanyah-Bold",
     fontSize: 14,
     color: TEXT_COLOR,
-  },
-  percentage: {
-    fontFamily: "Thmanyah-Bold",
-    fontSize: 14,
-    color: TEXT_COLOR,
-    opacity: 0.8,
   },
 });
